@@ -7,7 +7,8 @@ from AppKit import NSApplication, NSApp
 from Foundation import NSObject, NSLog
 from Cocoa import NSEvent, NSKeyDownMask
 from PyObjCTools import AppHelper
-import thread
+import _thread
+import random
 
 flag = False
 
@@ -26,7 +27,7 @@ def handler(event):
         if (int(event.keyCode()) == 6): # 6 - Z Key
             flag = not(flag)
             status = 'activated' if flag else 'deactivated'
-            print 'clicker ' + status
+            print('clicker ' + status)
             clicker()
         elif (int(event.keyCode()) == 53): # 53 - ESC Key 
             AppHelper.stopEventLoop()
@@ -47,13 +48,13 @@ def mouseclick(posx,posy):
 # the clicker
 def clicker():
     global flag
-    print 'clicker started'
+    print('clicker started')
     while(True):
         if(flag):
             ourEvent = CGEventCreate(None)
             currentpos = CGEventGetLocation(ourEvent) # Save current mouse position
             mouseclick(int(currentpos.x),int(currentpos.y))
-            sleep(0.01);
+            sleep(0.01 * random.randint(1,5))
     
 #main function
 def main():
@@ -63,5 +64,5 @@ def main():
     AppHelper.runEventLoop()
     
 if __name__ == '__main__':
-    thread.start_new_thread(clicker,())
+    _thread.start_new_thread(clicker,())
     main()
